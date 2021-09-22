@@ -2,6 +2,8 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import AddSnippet from "./AddSnippet";
 import Snippet from "./Snippet";
 import { ISnippet, NewSnippet } from "./../utils/Interfaces";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import SnippetListItem from "./SnippetListItem";
 
 export default function MainBody(): JSX.Element {
   const [snippets, setSnippets] = useState<ISnippet[] | NewSnippet[]>([]);
@@ -40,18 +42,40 @@ export default function MainBody(): JSX.Element {
     }
     getData();
   };
+  const routes = snippets.map((snippet) => {
+    const object:any = {}
+    object.title = snippet.title
+    object.route = `/${snippet.title}`
+    object.text = snippet.text
+    return object
+  })
+  console.log(routes)
+  const routeComponents = routes.map(({route, title, text}, idx) => <Route exact path={route} key={idx}> <Snippet title={title} key={idx} text={text}/></Route>)
   return (
     <>
-      {snippets.map((snippet, idx) => (
-        <Snippet title={snippet.title} text={snippet.text} key={idx} />
-      ))}
-
-      <AddSnippet
+    <BrowserRouter>
+    <AddSnippet
         newSnippet={newSnippet}
         onTitleChange={onTitleChange}
         onTextChange={onTextChange}
         onSnippetSubmit={onSnippetSubmit}
       />
+      <ul> 
+          {snippets.map((snippet, idx) => <SnippetListItem title={snippet.title} key={idx}/>)}
+
+      </ul>
+      <Switch>
+
+          {/* {snippets.map((snippet, idx) => {<Route exact path={`/${snippet.title}`} key={idx} component={Snippet}><Snippet title={snippet.title} text={snippet.text} key={idx}/></Route>})} */}
+        {routeComponents}
+      </Switch>
+      {/* {snippets.map((snippet, idx) => (
+        <Snippet title={snippet.title} text={snippet.text} key={idx} />
+      )).reverse()} */}
+
+    </BrowserRouter>
+    
+      
     </>
   );
 }

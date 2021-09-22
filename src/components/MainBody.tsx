@@ -6,11 +6,12 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import SnippetListItem from "./SnippetListItem";
 
 export default function MainBody(): JSX.Element {
-  const [snippets, setSnippets] = useState<ISnippet[] | NewSnippet[]>([]);
+  const [snippets, setSnippets] = useState<ISnippet[] >([]);
   const [newSnippet, setNewSnippet] = useState<NewSnippet>({
     title: "",
     text: "",
   });
+  
   useEffect(() => {
     getData();
   }, []);
@@ -36,7 +37,7 @@ export default function MainBody(): JSX.Element {
       };
       const response = await fetch("http://localhost:4000/pastes/", options);
       console.log(response.body);
-      setSnippets([...snippets, newSnippet]);
+      // setSnippets([...snippets, newSnippet]);
     } catch (e) {
       console.log(e);
     }
@@ -45,12 +46,13 @@ export default function MainBody(): JSX.Element {
   const routes = snippets.map((snippet) => {
     const object:any = {}
     object.title = snippet.title
-    object.route = `/${snippet.title}`
+    object.route = `/${snippet.id}`
     object.text = snippet.text
+    object.id = snippet.id
     return object
   })
   console.log(routes)
-  const routeComponents = routes.map(({route, title, text}, idx) => <Route exact path={route} key={idx}> <Snippet title={title} key={idx} text={text}/></Route>)
+  const routeComponents = routes.map(({route, title, text, id}) => <Route exact path={route} key={id}> <Snippet title={title} key={id} text={text} id={id}/></Route>)
   return (
     <>
     <BrowserRouter>
@@ -61,7 +63,7 @@ export default function MainBody(): JSX.Element {
         onSnippetSubmit={onSnippetSubmit}
       />
       <ul> 
-          {snippets.map((snippet, idx) => <SnippetListItem title={snippet.title} key={idx}/>)}
+          {snippets.map((snippet) => <SnippetListItem title={snippet.title} key={snippet.id} id={snippet.id}/>)}
 
       </ul>
       <Switch>

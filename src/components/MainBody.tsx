@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import AddSnippet from "./AddSnippet";
 import Snippet from "./Snippet";
-import { ISnippet, NewSnippet } from "./../utils/Interfaces";
+import { ISnippet, NewSnippet, IObject } from "./../utils/Interfaces";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import SnippetListItem from "./SnippetListItem";
 
@@ -44,15 +44,16 @@ export default function MainBody(): JSX.Element {
     getData();
   };
   const routes = snippets.map((snippet) => {
-    const object:any = {}
+    const object: IObject = {title: '', text: '', route: '', id: 0, created_at: ''}
     object.title = snippet.title
     object.route = `/${snippet.id}`
     object.text = snippet.text
     object.id = snippet.id
+    object.created_at = snippet.created_at
     return object
   })
   console.log(routes)
-  const routeComponents = routes.map(({route, title, text, id}) => <Route exact path={route} key={id}> <Snippet title={title} key={id} text={text} id={id}/></Route>)
+  const routeComponents = routes.map(({route, title, text, id, created_at}) => <Route exact path={route} key={id}> <Snippet title={title} created_at={created_at} text={text} id={id}/></Route>)
   return (
     <>
     <BrowserRouter>

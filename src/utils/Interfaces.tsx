@@ -24,3 +24,17 @@ export interface NewSnippet {
   title: string;
   text: string;
 }
+
+export interface IObject {
+  text: string;
+  title: string;
+  route: string;
+  id: number;
+  created_at: string;
+}
+
+export interface SnippetListItemProps {
+  title: string;
+  id: number;
+  key: number;
+}

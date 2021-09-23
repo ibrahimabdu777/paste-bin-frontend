@@ -1,30 +1,27 @@
 import { useEffect, useState } from "react";
-import { SnippetProps } from "../utils/Interfaces";
-import { useParams } from "react-router-dom";
+import { ISnippet} from "../utils/Interfaces";
 
-export default function Snippet({ title, text , id}: any): JSX.Element {
-  const [clickedSnippet, setClickedSnippet] = useState<any>({data: {snippet : [{}]}})
+export default function Snippet({id}: ISnippet): JSX.Element {
+  const [clickedSnippet, setClickedSnippet] = useState<ISnippet>({title: '', text: '', id: 0, created_at: ''})
   
-  const params = useParams()
-  
-  
+ 
   
   const getSnippet = async () => {
     const response = await fetch(`http://localhost:4000/pastes/${id}`)
     const json = await response.json()
-    setClickedSnippet(json)
+    setClickedSnippet(json.data.snippet[0])
     //setClickedSnippet({...clickedSnippet, title: json.data.snippet.title, text: json.data.snippet.text, id: json.data.snippet.id, created_at: json.data.snippet.created_at})
     
   }
   useEffect(() => {
   getSnippet()
-  }, []
+  }
   )
-  console.log('fetched single snippet', clickedSnippet.data.snippet[0])
+  console.log('fetched single snippet', clickedSnippet)
   return (
     <>
-      <h2>{clickedSnippet.data.snippet[0].title}</h2>
-      <p>{clickedSnippet.data.snippet[0].title}</p>
+      <h2>{clickedSnippet.title}</h2>
+      <p>{clickedSnippet.text}</p>
     </>
   );
 }

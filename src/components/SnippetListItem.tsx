@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom'
-import Snippet from './Snippet'
-export default function SnippetListItem({title, id}:any):JSX.Element{
+import { SnippetListItemProps } from '../utils/Interfaces'
+export default function SnippetListItem({title, id}:SnippetListItemProps):JSX.Element{
     
  return <><li>
             

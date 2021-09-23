@@ -1,8 +1,8 @@
 import { FormEventHandler, useEffect, useState } from "react";
-import { ISnippet} from "../utils/Interfaces";
+import { ISnippet, SnippetProps} from "../utils/Interfaces";
 import { useHistory } from "react-router";
 
-export default function Snippet({id , snippets, setSnippets}: any): JSX.Element {
+export default function Snippet({id , snippets, setSnippets}: SnippetProps): JSX.Element {
   const [clickedSnippet, setClickedSnippet] = useState<ISnippet>({title: '', text: '', id: 0, created_at: ''})
   // const [editedSnippet, setEditedSnippet] = useState()
  const history = useHistory()

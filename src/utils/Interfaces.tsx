@@ -1,4 +1,5 @@
-import { ChangeEventHandler, FormEventHandler } from "react";
+import { ChangeEventHandler, Dispatch, FormEventHandler, SetStateAction } from "react";
+import { Set } from "typescript";
 
 export interface ISnippet {
   title: string;
@@ -10,7 +11,11 @@ export interface ISnippet {
 export interface SnippetProps {
   title: string;
   text: string;
-  key: number;
+  id: number;
+  created_at: string;
+  snippets: ISnippet[];
+  setSnippets: Dispatch<SetStateAction<ISnippet[]>>
+
 }
 
 export interface AddSnippetProps {
@@ -23,4 +28,18 @@ export interface AddSnippetProps {
 export interface NewSnippet {
   title: string;
   text: string;
+}
+
+export interface IObject {
+  text: string;
+  title: string;
+  route: string;
+  id: number;
+  created_at: string;
+}
+
+export interface SnippetListItemProps {
+  title: string;
+  id: number;
+  key: number;
 }

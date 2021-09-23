@@ -1,16 +1,17 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import AddSnippet from "./AddSnippet";
 import Snippet from "./Snippet";
-import { ISnippet, NewSnippet } from "./../utils/Interfaces";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { ISnippet, NewSnippet, IObject } from "./../utils/Interfaces";
+import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import SnippetListItem from "./SnippetListItem";
 
 export default function MainBody(): JSX.Element {
-  const [snippets, setSnippets] = useState<ISnippet[] | NewSnippet[]>([]);
+  const [snippets, setSnippets] = useState<ISnippet[] >([]);
   const [newSnippet, setNewSnippet] = useState<NewSnippet>({
     title: "",
     text: "",
   });
+  
   useEffect(() => {
     getData();
   }, []);
@@ -36,21 +37,23 @@ export default function MainBody(): JSX.Element {
       };
       const response = await fetch("http://localhost:4000/pastes/", options);
       console.log(response.body);
-      setSnippets([...snippets, newSnippet]);
+      // setSnippets([...snippets, newSnippet]);
     } catch (e) {
       console.log(e);
     }
     getData();
   };
   const routes = snippets.map((snippet) => {
-    const object:any = {}
+    const object: IObject = {title: '', text: '', route: '', id: 0, created_at: ''}
     object.title = snippet.title
-    object.route = `/${snippet.title}`
+    object.route = `/${snippet.id}`
     object.text = snippet.text
+    object.id = snippet.id
+    object.created_at = snippet.created_at
     return object
   })
   console.log(routes)
-  const routeComponents = routes.map(({route, title, text}, idx) => <Route exact path={route} key={idx}> <Snippet title={title} key={idx} text={text}/></Route>)
+  const routeComponents = routes.map(({route, title, text, id, created_at}) => <Route exact path={route} key={id}> <Snippet title={title} created_at={created_at} text={text} id={id} snippets={snippets} setSnippets={setSnippets}/></Route>)
   return (
     <>
     <BrowserRouter>
@@ -61,11 +64,12 @@ export default function MainBody(): JSX.Element {
         onSnippetSubmit={onSnippetSubmit}
       />
       <ul> 
-          {snippets.map((snippet, idx) => <SnippetListItem title={snippet.title} key={idx}/>)}
+          <li><Link to={'/'}>Home</Link></li>
+          {snippets.map((snippet) => <SnippetListItem title={snippet.title} key={snippet.id} id={snippet.id}/>)}
 
       </ul>
       <Switch>
-
+        <Route exact path={'/'}><h1>home</h1> </Route>
           {/* {snippets.map((snippet, idx) => {<Route exact path={`/${snippet.title}`} key={idx} component={Snippet}><Snippet title={snippet.title} text={snippet.text} key={idx}/></Route>})} */}
         {routeComponents}
       </Switch>

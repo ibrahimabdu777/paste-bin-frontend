@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import AddSnippet from "./AddSnippet";
 import Snippet from "./Snippet";
 import { ISnippet, NewSnippet, IObject } from "./../utils/Interfaces";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import SnippetListItem from "./SnippetListItem";
 
 export default function MainBody(): JSX.Element {
@@ -53,7 +53,7 @@ export default function MainBody(): JSX.Element {
     return object
   })
   console.log(routes)
-  const routeComponents = routes.map(({route, title, text, id, created_at}) => <Route exact path={route} key={id}> <Snippet title={title} created_at={created_at} text={text} id={id}/></Route>)
+  const routeComponents = routes.map(({route, title, text, id, created_at}) => <Route exact path={route} key={id}> <Snippet title={title} created_at={created_at} text={text} id={id} snippets={snippets} setSnippets={setSnippets}/></Route>)
   return (
     <>
     <BrowserRouter>
@@ -64,11 +64,12 @@ export default function MainBody(): JSX.Element {
         onSnippetSubmit={onSnippetSubmit}
       />
       <ul> 
+          <li><Link to={'/'}>Home</Link></li>
           {snippets.map((snippet) => <SnippetListItem title={snippet.title} key={snippet.id} id={snippet.id}/>)}
 
       </ul>
       <Switch>
-
+        <Route exact path={'/'}><h1>home</h1> </Route>
           {/* {snippets.map((snippet, idx) => {<Route exact path={`/${snippet.title}`} key={idx} component={Snippet}><Snippet title={snippet.title} text={snippet.text} key={idx}/></Route>})} */}
         {routeComponents}
       </Switch>
